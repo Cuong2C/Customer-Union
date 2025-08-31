@@ -1,0 +1,196 @@
+﻿using Dapper;
+using Longbeach.Domain.Entities;
+using Longbeach.Domain.IRepository;
+using Longbeach.Infrastructure.Data;
+using Microsoft.Identity.Client;
+
+namespace Longbeach.Infrastructure.Repository;
+
+public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
+{
+    private const string INSERT_CUSTOMER_QUERY = @"
+        INSERT INTO Customers (
+            Id, ten_kh, ma_so_thue, dia_chi, dien_thoai, dien_thoai2, dien_thoai3, e_mail, quoc_tich, tinh_thanh, quan_huyen, gioi_tinh, ngay_sinh, 
+            tk_nh, ten_nh, loai_khach_ban, ma_kh_pearl, CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode
+        )
+        VALUES (
+            @Id, @Name, @TaxCode, @Address, @Phone, @Phone2, @Phone3, @Email, @Nationality, @Province, @District, @Gender, @DateOfBirth, 
+            @BankAccount, @BankName, @CustomerType, @PearlCustomerCode, @CreatedAt, @UpdatedAt, @CreatedClientSourceCode, @UpdatedClientSourceCode, @HashCode
+        )";
+
+    private const string GET_CUSTOMER_BY_ID_QUERY = @"
+            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
+            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
+            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE Id = @Id";
+
+    private const string GET_CUSTOMER_BY_TAXCODE_QUERY = @"
+            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
+            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
+            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE ma_so_thue = @TaxCode";
+
+    private const string GET_CUSTOMER_BY_PHONE_QUERY = @"
+            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
+            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
+            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE dien_thoai = @Phone";
+
+    private const string GET_ALL_CUSTOMERS_QUERY = @"
+            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
+            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
+            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers";
+
+    private const string GET_CUSTOMER_BY_PEARLCUSTOMERCODE_QUERY = @"
+            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
+            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
+            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE ma_kh_pearl = @PearlCustomerCode";
+
+    private const string DELETE_CUSTOMER_QUERY = @"DELETE FROM Customers WHERE Id = @Id";
+
+    private const string UPDATE_CUSTOMER_QUERY = @"
+            UPDATE Customers SET ten_kh = @Name, ma_so_thue = @TaxCode, dia_chi = @Address, dien_thoai = @Phone, dien_thoai2 = @Phone2, dien_thoai3 = @Phone3,
+            e_mail = @Email, quoc_tich = @Nationality, tinh_thanh = @Province, quan_huyen = @District, gioi_tinh = @Gender, ngay_sinh = @DateOfBirth, 
+            tk_nh = @BankAccount, ten_nh = @BankName, loai_khach_ban = @CustomerType, ma_kh_pearl = @PearlCustomerCode,
+            UpdatedAt = @UpdatedAt, UpdatedClientSourceCode = @UpdatedClientSourceCode, HashCode = @HashCode WHERE Id = @Id";
+
+    private const string IS_NEW_VERSION_CUSTOMER_QUERY = @"
+            SELECT TOP 1 1 FROM Customers WHERE Id = @Id AND HashCode = @HashCode";
+
+    private const string GET_HASHCODE_BY_ID_QUERY = @"
+            SELECT HashCode FROM Customers WHERE Id = @Id";
+
+    public async Task<int> AddCustomerAsync(Customer customer)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.ExecuteAsync(
+            INSERT_CUSTOMER_QUERY,
+            new { 
+                customer.Id,
+                customer.Name,
+                customer.TaxCode,
+                customer.Address,
+                customer.Phone,
+                customer.Phone2,
+                customer.Phone3,
+                customer.Email,
+                customer.Nationality,
+                customer.Province,
+                customer.District,
+                customer.Gender,
+                customer.DateOfBirth,
+                customer.BankAccount,
+                customer.BankName,
+                customer.CustomerType,
+                customer.PearlCustomerCode,
+                customer.CreatedAt,
+                customer.UpdatedAt,
+                customer.CreatedClientSourceCode,
+                customer.UpdatedClientSourceCode,
+                customer.HashCode
+            },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public Task<int> DeleteCustomerAsync(Guid id)
+    {
+        var connection = unitOfWork.Connection;
+        return connection.ExecuteAsync(
+            DELETE_CUSTOMER_QUERY,
+            new { Id = id },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public Task<IEnumerable<Customer>> GetAllCustomersAsync()
+    {
+        throw new NotImplementedException(); // not in use currently
+    }
+
+    public async Task<IEnumerable<Customer>> GetCustomersByPhoneAsync(string phoneNumber)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.QueryAsync<Customer>(
+            GET_CUSTOMER_BY_PHONE_QUERY,
+            new { Phone = phoneNumber },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<Customer?> GetCustomerByIdAsync(Guid id)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.QueryFirstOrDefaultAsync<Customer>(
+            GET_CUSTOMER_BY_ID_QUERY,
+            new { Id = id },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<Customer?> GetCustomerByTaxcodeAsync(string taxCode)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.QueryFirstOrDefaultAsync<Customer>(
+            GET_CUSTOMER_BY_TAXCODE_QUERY,
+            new { TaxCode = taxCode },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<Customer?> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.QueryFirstOrDefaultAsync<Customer>(
+            GET_CUSTOMER_BY_PEARLCUSTOMERCODE_QUERY,
+            new { PearlCustomerCode = pearlCustomerCode },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<string> GetHashCodeByIdAsync(Guid id)
+    {
+        var connection = unitOfWork.Connection;
+        var result =  await connection.ExecuteScalarAsync<string>(
+            GET_HASHCODE_BY_ID_QUERY,
+            new { Id = id },
+            transaction: unitOfWork.Transaction);
+
+        return result ?? string.Empty;
+    }
+
+    public async Task<bool> IsNewVersionCustomerAsync(Guid id, string hashCode)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.ExecuteScalarAsync<bool>(
+            IS_NEW_VERSION_CUSTOMER_QUERY,
+            new { Id = id, HashCode = hashCode },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<int> UpdateCustomerAsync(Customer customer)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.ExecuteAsync(
+            UPDATE_CUSTOMER_QUERY,
+            new {
+                customer.Id,
+                customer.Name,
+                customer.TaxCode,
+                customer.Address,
+                customer.Phone,
+                customer.Phone2,
+                customer.Phone3,
+                customer.Email,
+                customer.Nationality,
+                customer.Province,
+                customer.District,
+                customer.Gender,
+                customer.DateOfBirth,
+                customer.BankAccount,
+                customer.BankName,
+                customer.CustomerType,
+                customer.PearlCustomerCode,
+                customer.UpdatedAt,
+                customer.UpdatedClientSourceCode,
+                customer.HashCode
+            },
+            transaction: unitOfWork.Transaction);
+    }
+}
