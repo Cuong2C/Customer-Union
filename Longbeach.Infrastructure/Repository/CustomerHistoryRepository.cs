@@ -9,8 +9,8 @@ public class CustomerHistoryRepository(IUnitOfWork unitOfWork) : ICustomerHistor
 {
     private const string INSERT_CUSTOMERHISTORY_QUERY = @"
         INSERT INTO CustomerHistories (
-            Id, ten_kh, ma_so_thue, dia_chi, dien_thoai, dien_thoai2, dien_thoai3, e_mail, quoc_tich, tinh_thanh, quan_huyen, gioi_tinh, ngay_sinh, 
-            tk_nh, ten_nh, loai_khach_ban, ma_kh_pearl, CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode, ActionTime, AddedByAction, ChangedByClient
+            Id, Name, TaxCode, Address, Phone, Phone2, Phone3, Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode, CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode, ActionTime, AddedByAction, ChangedByClient
         )
         VALUES (
             @Id, @Name, @TaxCode, @Address, @Phone, @Phone2, @Phone3, @Email, @Nationality, @Province, @District, @Gender, @DateOfBirth, 

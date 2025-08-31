@@ -25,7 +25,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseOutputCache();
 app.MapLongbeachApi();
 app.Run();
 
