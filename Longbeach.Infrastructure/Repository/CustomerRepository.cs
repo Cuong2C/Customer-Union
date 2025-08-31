@@ -10,8 +10,8 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
 {
     private const string INSERT_CUSTOMER_QUERY = @"
         INSERT INTO Customers (
-            Id, ten_kh, ma_so_thue, dia_chi, dien_thoai, dien_thoai2, dien_thoai3, e_mail, quoc_tich, tinh_thanh, quan_huyen, gioi_tinh, ngay_sinh, 
-            tk_nh, ten_nh, loai_khach_ban, ma_kh_pearl, CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode
+            Id, Name, TaxCode, Address, Phone, Phone2, Phone3, Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode, CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode
         )
         VALUES (
             @Id, @Name, @TaxCode, @Address, @Phone, @Phone2, @Phone3, @Email, @Nationality, @Province, @District, @Gender, @DateOfBirth, 
@@ -19,41 +19,41 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
         )";
 
     private const string GET_CUSTOMER_BY_ID_QUERY = @"
-            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
-            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
-            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
             CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE Id = @Id";
 
     private const string GET_CUSTOMER_BY_TAXCODE_QUERY = @"
-            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
-            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
-            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
-            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE ma_so_thue = @TaxCode";
+            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE TaxCode = @TaxCode";
 
     private const string GET_CUSTOMER_BY_PHONE_QUERY = @"
-            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
-            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
-            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
-            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE dien_thoai = @Phone";
+            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE Phone = @Phone";
 
     private const string GET_ALL_CUSTOMERS_QUERY = @"
-            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
-            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
-            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
+            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
             CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers";
 
     private const string GET_CUSTOMER_BY_PEARLCUSTOMERCODE_QUERY = @"
-            SELECT Id, ten_kh AS Name, ma_so_thue AS TaxCode, dia_chi AS Address, dien_thoai AS Phone, dien_thoai2 AS Phone2, dien_thoai3 AS Phone3,
-            e_mail AS Email, quoc_tich AS Nationality, tinh_thanh AS Province, quan_huyen AS District, gioi_tinh AS Gender, ngay_sinh AS DateOfBirth, 
-            tk_nh AS BankAccount, ten_nh AS BankName, loai_khach_ban AS CustomerType, ma_kh_pearl AS PearlCustomerCode,
-            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE ma_kh_pearl = @PearlCustomerCode";
+            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE PearlCustomerCode = @PearlCustomerCode";
 
     private const string DELETE_CUSTOMER_QUERY = @"DELETE FROM Customers WHERE Id = @Id";
 
     private const string UPDATE_CUSTOMER_QUERY = @"
-            UPDATE Customers SET ten_kh = @Name, ma_so_thue = @TaxCode, dia_chi = @Address, dien_thoai = @Phone, dien_thoai2 = @Phone2, dien_thoai3 = @Phone3,
-            e_mail = @Email, quoc_tich = @Nationality, tinh_thanh = @Province, quan_huyen = @District, gioi_tinh = @Gender, ngay_sinh = @DateOfBirth, 
-            tk_nh = @BankAccount, ten_nh = @BankName, loai_khach_ban = @CustomerType, ma_kh_pearl = @PearlCustomerCode,
+            UPDATE Customers SET Name = @Name, TaxCode = @TaxCode, Address = @Address, Phone = @Phone, Phone2 = @Phone2, Phone3 = @Phone3,
+            Email = @Email, Nationality = @Nationality, Province = @Province, District = @District, Gender = @Gender, DateOfBirth = @DateOfBirth, 
+            BankAccount = @BankAccount, BankName = @BankName, CustomerType = @CustomerType, PearlCustomerCode = @PearlCustomerCode,
             UpdatedAt = @UpdatedAt, UpdatedClientSourceCode = @UpdatedClientSourceCode, HashCode = @HashCode WHERE Id = @Id";
 
     private const string IS_NEW_VERSION_CUSTOMER_QUERY = @"

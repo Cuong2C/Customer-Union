@@ -1,10 +1,18 @@
 ﻿using AutoMapper;
+using Longbeach.Domain.Entities;
 using Longbeach_Customer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Longbeach_Customer.Services;
 
-public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistoryRepository customerHistoryRepo, IUnitOfWork unitOfWork, ILogger<ClientSourceServices> logger, IMapper mapper) : ICustomerServices
+public class CustomerServices(ICustomerRepository customerRepo, 
+    ICustomerHistoryRepository customerHistoryRepo, 
+    IUnitOfWork unitOfWork, 
+    ILogger<ClientSourceServices> logger, IMapper mapper,
+    IDistributedCache cache
+    ) : ICustomerServices
 {
     public async Task<Results<Ok<HashCodeResponse>, BadRequest>> AddCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest)
     {
@@ -83,6 +91,18 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
 
     public async Task<Results<Ok<CustomerResponse>, NotFound>> GetCustomerByIdAsync(Guid id)
     {
+        string key = $"customer:{id}";
+        var cachedCustomer = await cache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedCustomer))
+        {
+            var redisResult = JsonSerializer.Deserialize<CustomerResponse>(cachedCustomer);
+            if (redisResult != null)
+            {
+                logger.LogInformation($"Retrieved customer with id {id} from cache successfully.");
+                return TypedResults.Ok(redisResult);
+            }
+        }
+
         var customer = await customerRepo.GetCustomerByIdAsync(id);
 
         if (customer == null)
@@ -93,6 +113,14 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
 
         logger.LogInformation($"Retrieved customer with id {id} successfully.");
         var customerResponse = mapper.Map<CustomerResponse>(customer);
+
+        cachedCustomer = JsonSerializer.Serialize(customerResponse);
+        var cacheOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+        };
+        await cache.SetStringAsync(key, cachedCustomer, cacheOptions);
+
         return TypedResults.Ok(customerResponse);
     }
 
@@ -102,6 +130,18 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
         {
             logger.LogWarning("Phone number is null or empty.");
             return TypedResults.NotFound();
+        }
+
+        string key = $"customer:customer-phone:{phoneNumber}";
+        var cachedCustomer = await cache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedCustomer))
+        {
+            var redisResult = JsonSerializer.Deserialize<IEnumerable<CustomerResponse>>(cachedCustomer);
+            if (redisResult != null && redisResult.Any())
+            {
+                logger.LogInformation($"Retrieved customer with phone {phoneNumber} from cache successfully.");
+                return TypedResults.Ok(redisResult);
+            }
         }
 
         var customer = await customerRepo.GetCustomersByPhoneAsync(phoneNumber);
@@ -115,6 +155,14 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
         logger.LogInformation($"Retrieved customer with phone {phoneNumber} successfully.");
         var customerResponse = mapper.Map<IEnumerable<CustomerResponse>>(customer);
 
+        cachedCustomer = JsonSerializer.Serialize(customerResponse);
+        var cacheOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+        };
+
+        await cache.SetStringAsync(key, cachedCustomer, cacheOptions);
+
         return TypedResults.Ok(customerResponse);
     }
 
@@ -124,6 +172,18 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
         {
             logger.LogWarning("Taxcode is null or empty.");
             return TypedResults.NotFound();
+        }
+
+        string key = $"customer:customer-taxcode:{taxcode}";
+        var cachedCustomer = await cache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedCustomer))
+        {
+            var redisResult = JsonSerializer.Deserialize<CustomerResponse>(cachedCustomer);
+            if (redisResult != null)
+            {
+                logger.LogInformation($"Retrieved customer with taxcode {taxcode} from cache successfully.");
+                return TypedResults.Ok(redisResult);
+            }
         }
 
         var customer = await customerRepo.GetCustomerByTaxcodeAsync(taxcode);
@@ -136,6 +196,14 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
 
         logger.LogInformation($"Retrieved customer with id {taxcode} successfully.");
         var customerResponse = mapper.Map<CustomerResponse>(customer);
+
+        cachedCustomer = JsonSerializer.Serialize(customerResponse);
+        var cacheOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+        };
+        await cache.SetStringAsync(key, cachedCustomer, cacheOptions);
+
         return TypedResults.Ok(customerResponse);
     }
 
@@ -145,6 +213,18 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
         {
             logger.LogWarning("Pearl customer code is null or empty.");
             return TypedResults.NotFound();
+        }
+
+        string key = $"customer:customer-pearl:{pearlCustomerCode}";
+        var cachedCustomer = await cache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedCustomer))
+        {
+            var redisResult = JsonSerializer.Deserialize<CustomerResponse>(cachedCustomer);
+            if (redisResult != null)
+            {
+                logger.LogInformation($"Retrieved customer with pearlCustomerCode {pearlCustomerCode} from cache successfully.");
+                return TypedResults.Ok(redisResult);
+            }
         }
 
         var customer = await customerRepo.GetCustomerByPearlCustomerCodeAsync(pearlCustomerCode);
@@ -157,6 +237,14 @@ public class CustomerServices(ICustomerRepository customerRepo, ICustomerHistory
 
         logger.LogInformation($"Retrieved customer with pearlCustomerCode {pearlCustomerCode} successfully.");
         var customerResponse = mapper.Map<CustomerResponse>(customer);
+
+        cachedCustomer = JsonSerializer.Serialize(customerResponse);
+        var cacheOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+        };
+        await cache.SetStringAsync(key, cachedCustomer, cacheOptions);
+
         return TypedResults.Ok(customerResponse);
     }
 
