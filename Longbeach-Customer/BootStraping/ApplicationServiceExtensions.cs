@@ -43,7 +43,7 @@ public static class ApplicationServiceExtensions
 
         builder.Services.AddScoped<ICustomerServices, CustomerServices>();
 
-        builder.Services.AddScoped<IAuthManagerServices, AuthManagerServices>();
+        builder.Services.AddScoped<IAuthManagerHandlers, AuthManagerServices>();
 
         builder.Services.AddScoped<ICustomerHistoryRepository, CustomerHistoryRepository>();
 

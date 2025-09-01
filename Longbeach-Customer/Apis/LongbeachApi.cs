@@ -29,7 +29,8 @@ public static class LongbeachApi
             [Authorize] (ICustomerServices customerServices, string taxCode) => customerServices.GetCustomerByTaxcodeAsync(taxCode));
         v1.MapGet("/customers/customer-pearl/{pearlCustomerCode}",
             [Authorize] (ICustomerServices customerServices, string pearlCustomerCode) => customerServices.GetCustomerByPearlCustomerCodeAsync(pearlCustomerCode));
-        //v1.MapGet("/customers", GetAllCustomers); // not in use currently
+        v1.MapGet("/customers", 
+            [Authorize] (ICustomerServices CustomerServices, DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next") => CustomerServices.GetCustomersAsync(cursorDate, cursorId, pageSize, direction)); 
         v1.MapGet("/customers/{id}", 
             [Authorize] (ICustomerServices customerServices, Guid id) => customerServices.GetCustomerByIdAsync(id));
         v1.MapGet("/customers/{id}/{hashCode}",
@@ -43,11 +44,11 @@ public static class LongbeachApi
 
         // AuthManager APIs
         v1.MapPost("/auth/tokens",
-            [AllowAnonymous] (GenrateTokenRequest genrateTokenRequest, IAuthManagerServices authManagerServices) => authManagerServices.GenerateTokenAsync(genrateTokenRequest)); 
+            [AllowAnonymous] (GenrateTokenRequest genrateTokenRequest, IAuthManagerHandlers authManagerServices) => authManagerServices.GenerateTokenAsync(genrateTokenRequest)); 
         v1.MapPost("/auth/tokens/revoke",
-            [Authorize] (RevokeTokenRequest revokeTokenRequest, IAuthManagerServices authManagerServices, HttpContext httpContext) => authManagerServices.RevokeTokenAsync(revokeTokenRequest, httpContext));
+            [Authorize] (RevokeTokenRequest revokeTokenRequest, IAuthManagerHandlers authManagerServices, HttpContext httpContext) => authManagerServices.RevokeTokenAsync(revokeTokenRequest, httpContext));
         v1.MapPost("/auth/client-secrets",
-            [AllowAnonymous] (CreateClientSecretRequest clientSecretRequest, IAuthManagerServices authManagerServices) => authManagerServices.CreateClientSecretAsync(clientSecretRequest)); 
+            [AllowAnonymous] (CreateClientSecretRequest clientSecretRequest, IAuthManagerHandlers authManagerServices) => authManagerServices.CreateClientSecretAsync(clientSecretRequest)); 
 
         return endpoints;
     }

@@ -36,11 +36,13 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             BankAccount, BankName, CustomerType, PearlCustomerCode,
             CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE Phone = @Phone";
 
-    private const string GET_ALL_CUSTOMERS_QUERY = @"
-            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+    private const string GET_CUSTOMERS_QUERY = @"
+            SELECT TOP(@pageSize) Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
             Email, Nationality, Province, District, Gender, DateOfBirth, 
             BankAccount, BankName, CustomerType, PearlCustomerCode,
-            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers";
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers
+            WHERE CreatedAt < @cursorDate OR (CreatedAt = @cursorDate AND Id < @cursorId)
+            ORDER BY CreatedAt DESC, Id DESC";
 
     private const string GET_CUSTOMER_BY_PEARLCUSTOMERCODE_QUERY = @"
             SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
@@ -191,6 +193,15 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
                 customer.UpdatedClientSourceCode,
                 customer.HashCode
             },
+            transaction: unitOfWork.Transaction);
+    }
+
+    public async Task<IEnumerable<Customer>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize)
+    {
+        var connection = unitOfWork.Connection;
+        return await connection.QueryAsync<Customer>(
+            GET_CUSTOMERS_QUERY,
+            new { cursorDate, cursorId, pageSize },
             transaction: unitOfWork.Transaction);
     }
 }

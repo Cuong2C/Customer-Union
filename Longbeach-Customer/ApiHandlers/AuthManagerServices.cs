@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 namespace Longbeach_Customer.Services;
 
 public class AuthManagerServices(IClientCredentialRepository clientCredentialRepo, IClientSourceRepository clientSourceRepo,
-    ITokenAuthenticationServices tokenAuthenticationServices, IUnitOfWork unitOfWork, ILogger<AuthManagerServices> logger) : IAuthManagerServices
+    ITokenAuthenticationServices tokenAuthenticationServices, IUnitOfWork unitOfWork, ILogger<AuthManagerServices> logger) : IAuthManagerHandlers
 {
     public async Task<Results<Ok<CreateClientSecretResponse>, BadRequest>> CreateClientSecretAsync(CreateClientSecretRequest createClientSecretRequest)
     {
