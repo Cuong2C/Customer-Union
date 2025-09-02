@@ -20,6 +20,8 @@ public class CustomerResponse
     public string? BankAccount { get; set; }
     public string? BankName { get; set; }
     public string? CustomerType { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     public string HashCode { get; set; } = default!;
 }
 
