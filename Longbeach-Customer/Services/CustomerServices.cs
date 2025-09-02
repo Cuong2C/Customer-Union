@@ -321,7 +321,7 @@ public class CustomerServices(ICustomerRepository customerRepo,
 
         var pagedResult = new PagedResult<CustomerResponse>
         {
-            Items = customerResponses.Take(pageSize).ToList(),
+            Items = direction == "next" ? customerResponses.Take(pageSize).ToList() : customerResponses.Take(pageSize).Reverse().ToList(),
             HasMore = direction == "next" ? customerResponses.Count() > pageSize : true,
             pageSize = pageSize
         };
