@@ -3,6 +3,7 @@ using Longbeach.Domain.Entities;
 using Longbeach.Domain.IRepository;
 using Longbeach.Infrastructure.Data;
 using Microsoft.Identity.Client;
+using System.Collections;
 
 namespace Longbeach.Infrastructure.Repository;
 
@@ -36,11 +37,28 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             BankAccount, BankName, CustomerType, PearlCustomerCode,
             CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers WHERE Phone = @Phone";
 
-    private const string GET_ALL_CUSTOMERS_QUERY = @"
-            SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+    private const string GET_CUSTOMERS_QUERY = @"
+            SELECT TOP(@pageSize) Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
             Email, Nationality, Province, District, Gender, DateOfBirth, 
             BankAccount, BankName, CustomerType, PearlCustomerCode,
-            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers";
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers
+            WHERE CreatedAt < @cursorDate OR (CreatedAt = @cursorDate AND Id < @cursorId)
+            ORDER BY CreatedAt DESC, Id DESC";
+
+    private const string GET_FIRSTPAGE_CUSTOMERS_QUERY = @"
+            SELECT TOP(@pageSize) Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers
+            ORDER BY CreatedAt DESC, Id DESC";
+
+    private const string GET_PREV_CUSTOMERS_QUERY = @"
+            SELECT TOP(@pageSize) Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
+            Email, Nationality, Province, District, Gender, DateOfBirth, 
+            BankAccount, BankName, CustomerType, PearlCustomerCode,
+            CreatedAt, UpdatedAt, CreatedClientSourceCode, UpdatedClientSourceCode, HashCode FROM Customers
+            WHERE CreatedAt > @cursorDate OR (CreatedAt = @cursorDate AND Id > @cursorId)
+            ORDER BY CreatedAt ASC, Id ASC";
 
     private const string GET_CUSTOMER_BY_PEARLCUSTOMERCODE_QUERY = @"
             SELECT Id, Name, TaxCode, Address, Phone, Phone2, Phone3,
@@ -193,4 +211,35 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             },
             transaction: unitOfWork.Transaction);
     }
+
+    public async Task<IEnumerable<Customer>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize, string direction)
+    {
+        var connection = unitOfWork.Connection;
+        if (cursorDate == null || cursorId == null)
+        {
+            // First page
+            return await connection.QueryAsync<Customer>(
+                GET_FIRSTPAGE_CUSTOMERS_QUERY,
+                new { pageSize },
+                transaction: unitOfWork.Transaction);
+        }
+        else if (direction == "next")
+        {
+            // Next page
+            return await connection.QueryAsync<Customer>(
+                GET_CUSTOMERS_QUERY,
+                new { cursorDate, cursorId, pageSize },
+                transaction: unitOfWork.Transaction);
+        }
+        else
+        {
+            // Previous page
+            return await connection.QueryAsync<Customer>(
+                GET_PREV_CUSTOMERS_QUERY,
+                new { cursorDate, cursorId, pageSize },
+                transaction: unitOfWork.Transaction);
+        }
+
+    }
+
 }

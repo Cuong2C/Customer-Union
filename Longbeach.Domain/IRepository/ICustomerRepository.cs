@@ -9,6 +9,7 @@ public interface ICustomerRepository
     Task<IEnumerable<Customer>> GetCustomersByPhoneAsync(string phoneNumber);
     Task<Customer?> GetCustomerByTaxcodeAsync(string taxCode);
     Task<Customer?> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode);
+    Task<IEnumerable<Customer>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize, string direction);
     Task<string> GetHashCodeByIdAsync(Guid id);
     Task<bool> IsNewVersionCustomerAsync(Guid id, string hashCode);
     Task<int> AddCustomerAsync(Customer customer);

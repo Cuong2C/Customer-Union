@@ -306,4 +306,43 @@ public class CustomerServices(ICustomerRepository customerRepo,
             return TypedResults.BadRequest();
         }
     }
+
+    public async Task<Results<Ok<PagedResult<CustomerResponse>>, NotFound>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
+    {
+        
+        var customers = await customerRepo.GetCustomersAsync(cursorDate, cursorId, pageSize + 1, direction);
+        if (!customers.Any())
+        {
+            logger.LogWarning("No customers found.");
+            return TypedResults.NotFound();
+        }
+        logger.LogInformation("Retrieved all customers successfully.");
+        var customerResponses = mapper.Map<IEnumerable<CustomerResponse>>(customers);
+
+        var pagedResult = new PagedResult<CustomerResponse>
+        {
+            Items = customerResponses.Take(pageSize).ToList(),
+            HasMore = direction == "next" ? customerResponses.Count() > pageSize : true,
+            pageSize = pageSize
+        };
+
+        if (pagedResult.Items.Any())
+        {
+            var lastCustomer = pagedResult.Items.Last();
+            pagedResult.NextCursor = new CustomerCursor
+            {
+                CursorDate = lastCustomer.CreatedAt,
+                CursorId = lastCustomer.Id
+            };
+
+            var firstCustomer = pagedResult.Items.First();
+            pagedResult.PreviousCursor = new CustomerCursor
+            {
+                CursorDate = firstCustomer.CreatedAt,
+                CursorId = firstCustomer.Id
+            };
+        }
+
+        return TypedResults.Ok(pagedResult);
+    }
 }
