@@ -309,7 +309,18 @@ public class CustomerServices(ICustomerRepository customerRepo,
 
     public async Task<Results<Ok<PagedResult<CustomerResponse>>, NotFound>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
     {
-        
+        string key = $"customer:{cursorDate}:{cursorId}:{pageSize}:{direction}";
+        var cachedCustomers = await cache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedCustomers))
+        {
+            var redisResult = JsonSerializer.Deserialize<PagedResult<CustomerResponse>>(cachedCustomers);
+            if (redisResult != null)
+            {
+                logger.LogInformation($"Retrieved customers from cache successfully.");
+                return TypedResults.Ok(redisResult);
+            }
+        }
+
         var customers = await customerRepo.GetCustomersAsync(cursorDate, cursorId, pageSize + 1, direction);
         if (!customers.Any())
         {
@@ -342,6 +353,13 @@ public class CustomerServices(ICustomerRepository customerRepo,
                 CursorId = firstCustomer.Id
             };
         }
+
+        cachedCustomers = JsonSerializer.Serialize(pagedResult);
+        var cacheOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(15),
+        };
+        await cache.SetStringAsync(key, cachedCustomers, cacheOptions);
 
         return TypedResults.Ok(pagedResult);
     }
