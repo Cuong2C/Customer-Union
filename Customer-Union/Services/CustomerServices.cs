@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Customer_Union.Domain.Entities;
-using Customer_Union.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Customer_Union.Application.Dtos;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -56,7 +54,7 @@ public class CustomerServices(ICustomerRepository customerRepo,
         }
     }
 
-    public async Task<Results<Ok, BadRequest>> DeleteCustomerAsync(HttpContext httpContext, Guid id)
+    public async Task<IResult> DeleteCustomerAsync(HttpContext httpContext, Guid id)
     {
         var customerInDb = await customerRepo.GetCustomerByIdAsync(id);
         if (customerInDb == null)

@@ -1,5 +1,5 @@
-﻿using Customer_Union.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿
+using Customer_Union.Application.Dtos;
 
 namespace Customer_Union.Services.IServices;
 

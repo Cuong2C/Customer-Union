@@ -1,6 +1,11 @@
-﻿using Customer_Union.Models;
+﻿using Customer_Union.Application.Dtos;
+using Customer_Union.EndpointHandlers.CustomerHandlers;
+using Customer_Union.EndpointHandlers.Securities;
+using CustomerUnion.EndpointHandlers.ClientSourceHandlers;
+using CustomerUnion.EndpointHandlers.CustomerHandlers;
+using CustomerUnion.EndpointHandlers.Securities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Customer_Union.Apis;
 
@@ -12,43 +17,44 @@ public static class LongbeachApi
         var v1 = vApi.MapGroup("/api/v{version:apiVersion}/longbeach").HasApiVersion(1, 0);
 
         // Client Source APIs
-        v1.MapGet("/client-sources", [Authorize] (IClientSourceServices clientSourceServices) => clientSourceServices.GetAllClientSourcesAsync());
+        v1.MapGet("/client-sources", [Authorize] ([FromServices] GetAllClientSourceHandler handler) => handler.GetAllClientSourcesAsync());
         v1.MapGet("/client-sources/{clientSourceCode}",
-            [Authorize](IClientSourceServices clientSourceServices, string clientSourceCode) => clientSourceServices.GetClientSourceByCodeAsync(clientSourceCode));
-        v1.MapPost("/client-sources", 
-            [AllowAnonymous] (IClientSourceServices clientSourceServices, ClientSource clientSource) => clientSourceServices.AddClientSourceAsync(clientSource));
-        v1.MapPut("/client-sources", 
-            [AllowAnonymous] (IClientSourceServices clientSourceServices, ClientSource clientSource) => clientSourceServices.UpdateClientSourceAsync(clientSource));
-        v1.MapDelete("/client-sources/{clientCode}", 
-            [AllowAnonymous] (IClientSourceServices clientSourceServices, string clientCode) => clientSourceServices.DeleteClientSourceAsync(clientCode));
+            [Authorize] ([FromServices] GetClientSourceByCodeHandler handler, string clientSourceCode) => handler.GetClientSourceByCodeAsync(clientSourceCode));
+        v1.MapPost("/client-sources",
+            [AllowAnonymous] ([FromServices] AddClientSourceHandler handler, ClientSourceRequest clientSourceRequest) => handler.AddClientSourceAsync(clientSourceRequest));
+        v1.MapPut("/client-sources",
+            [AllowAnonymous] ([FromServices] UpdateClientSourceHandler handler, ClientSourceRequest clientSourceRequest) => handler.UpdateClientSourceAsync(clientSourceRequest));
+        v1.MapDelete("/client-sources/{clientCode}",
+            [AllowAnonymous] ([FromServices] DeleteClientSourceHandler handler, string clientCode) => handler.DeleteClientSourceAsync(clientCode));
 
         // Customer APIs
-        v1.MapGet("/customers/customer-phone/{phoneNumber}", 
-            [Authorize] (ICustomerServices customerServices, string phoneNumber) => customerServices.GetCustomerByPhoneAsync(phoneNumber));
-        v1.MapGet("/customers/customer-taxcode/{taxCode}", 
-            [Authorize] (ICustomerServices customerServices, string taxCode) => customerServices.GetCustomerByTaxcodeAsync(taxCode));
+        v1.MapGet("/customers/customer-phone/{phoneNumber}",
+            [Authorize] ([FromServices] GetCustomerByPhoneHandler handler, string phoneNumber) => handler.GetCustomerByPhoneAsync(phoneNumber));
+        v1.MapGet("/customers/customer-taxcode/{taxCode}",
+            [Authorize] ([FromServices] GetCustomerByTaxCodeHandler handler, string taxCode) => handler.GetCustomerByTaxCodeAsync(taxCode));
         v1.MapGet("/customers/customer-pearl/{pearlCustomerCode}",
-            [Authorize] (ICustomerServices customerServices, string pearlCustomerCode) => customerServices.GetCustomerByPearlCustomerCodeAsync(pearlCustomerCode));
-        v1.MapGet("/customers", 
-            [Authorize] (ICustomerServices CustomerServices, DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next") => CustomerServices.GetCustomersAsync(cursorDate, cursorId, pageSize, direction)); 
-        v1.MapGet("/customers/{id}", 
-            [Authorize] (ICustomerServices customerServices, Guid id) => customerServices.GetCustomerByIdAsync(id));
+            [Authorize] ([FromServices] GetCustomerByPearlCustomerCodeHandler handler, string pearlCustomerCode) => handler.GetCustomerByPearlCustomerCodeAsync(pearlCustomerCode));
+        v1.MapGet("/customers",
+            [Authorize] ([FromServices] GetCustomersHandler handler, DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
+                => handler.GetCustomersAsync(cursorDate, cursorId, pageSize, direction));
+        v1.MapGet("/customers/{id}",
+            [Authorize] ([FromServices] GetCustomerByIdHandler handler, Guid id) => handler.GetCustomerByIdAsync(id));
         v1.MapGet("/customers/{id}/{hashCode}",
-            [Authorize] (ICustomerServices customerServices, Guid id, string hashCode) => customerServices.IsNewVersionCustomerAsync(id, hashCode));
+            [Authorize] ([FromServices] CheckNewVersionCustomerHandler handler, Guid id, string hashCode) => handler.IsNewVersionCustomerAsync(id, hashCode));
         v1.MapPost("/customers",
-            [Authorize](HttpContext httpContext, CustomerRequest customerRequest, ICustomerServices customerServices) => customerServices.AddCustomerAsync(httpContext, customerRequest));
+            [Authorize] ([FromServices] AddCustomerHandler handler, HttpContext httpContext, CustomerRequest customerRequest) => handler.AddCustomerAsync(httpContext, customerRequest));
         v1.MapPut("/customers/{id}",
-            [Authorize] (HttpContext httpContext, CustomerRequest customerRequest, ICustomerServices customerServices, Guid id) => customerServices.UpdateCustomerAsync(httpContext, customerRequest, id));
+            [Authorize] ([FromServices] UpdateCustomerHandler handler, HttpContext httpContext, CustomerRequest customerRequest, Guid id) => handler.UpdateCustomerAsync(httpContext, customerRequest, id));
         v1.MapDelete("/customers/{id}",
-            [Authorize] (HttpContext httpContext, Guid id, ICustomerServices customerServices) => customerServices.DeleteCustomerAsync(httpContext, id));
+            [Authorize] ([FromServices] DeleteCustomerHandler handler, HttpContext httpContext, Guid id) => handler.DeleteCustomerAsync(httpContext, id));
 
         // AuthManager APIs
         v1.MapPost("/auth/tokens",
-            [AllowAnonymous] (GenrateTokenRequest genrateTokenRequest, IAuthManagerHandlers authManagerServices) => authManagerServices.GenerateTokenAsync(genrateTokenRequest)); 
+            [AllowAnonymous] ([FromServices] GenerateTokenHandler handler, GenrateTokenRequest genrateTokenRequest) => handler.GenerateTokenAsync(genrateTokenRequest));
         v1.MapPost("/auth/tokens/revoke",
-            [Authorize] (RevokeTokenRequest revokeTokenRequest, IAuthManagerHandlers authManagerServices, HttpContext httpContext) => authManagerServices.RevokeTokenAsync(revokeTokenRequest, httpContext));
+            [Authorize] ([FromServices] RevokeTokenHandler handler, RevokeTokenRequest revokeTokenRequest, HttpContext httpContext) => handler.RevokeTokenAsync(revokeTokenRequest, httpContext));
         v1.MapPost("/auth/client-secrets",
-            [AllowAnonymous] (CreateClientSecretRequest clientSecretRequest, IAuthManagerHandlers authManagerServices) => authManagerServices.CreateClientSecretAsync(clientSecretRequest)); 
+            [AllowAnonymous] ([FromServices] CreateClientSecretHandler handler, CreateClientSecretRequest clientSecretRequest) => handler.CreateClientSecretAsync(clientSecretRequest));                           
 
         return endpoints;
     }

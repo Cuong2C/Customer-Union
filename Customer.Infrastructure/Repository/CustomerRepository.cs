@@ -80,7 +80,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
     private const string GET_HASHCODE_BY_ID_QUERY = @"
             SELECT HashCode FROM Customers WHERE Id = @Id";
 
-    public async Task<int> AddCustomerAsync(Domain.Entities.Customer customer)
+    public async Task<int> AddCustomerAsync(Customer customer)
     {
         var connection = unitOfWork.Connection;
         return await connection.ExecuteAsync(
@@ -121,12 +121,12 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public Task<IEnumerable<Domain.Entities.Customer>> GetAllCustomersAsync()
+    public Task<IEnumerable<Customer>> GetAllCustomersAsync()
     {
         throw new NotImplementedException(); // not in use currently
     }
 
-    public async Task<IEnumerable<Domain.Entities.Customer>> GetCustomersByPhoneAsync(string phoneNumber)
+    public async Task<IEnumerable<Customer>> GetCustomersByPhoneAsync(string phoneNumber)
     {
         var connection = unitOfWork.Connection;
         return await connection.QueryAsync<Customer>(
@@ -135,7 +135,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<Domain.Entities.Customer?> GetCustomerByIdAsync(Guid id)
+    public async Task<Customer?> GetCustomerByIdAsync(Guid id)
     {
         var connection = unitOfWork.Connection;
         return await connection.QueryFirstOrDefaultAsync<Customer>(
@@ -144,7 +144,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<Domain.Entities.Customer?> GetCustomerByTaxcodeAsync(string taxCode)
+    public async Task<Customer?> GetCustomerByTaxcodeAsync(string taxCode)
     {
         var connection = unitOfWork.Connection;
         return await connection.QueryFirstOrDefaultAsync<Customer>(
@@ -153,7 +153,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<Domain.Entities.Customer?> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode)
+    public async Task<Customer?> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode)
     {
         var connection = unitOfWork.Connection;
         return await connection.QueryFirstOrDefaultAsync<Customer>(
@@ -182,7 +182,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<int> UpdateCustomerAsync(Domain.Entities.Customer customer)
+    public async Task<int> UpdateCustomerAsync(Customer customer)
     {
         var connection = unitOfWork.Connection;
         return await connection.ExecuteAsync(
@@ -212,7 +212,7 @@ public class CustomerRepository(IUnitOfWork unitOfWork) : ICustomerRepository
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<IEnumerable<Domain.Entities.Customer>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize, string direction)
+    public async Task<IEnumerable<Customer>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize, string direction)
     {
         var connection = unitOfWork.Connection;
         if (cursorDate == null || cursorId == null)

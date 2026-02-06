@@ -1,10 +1,8 @@
 
-using Customer_Union.IntegrationTest.Fixture;
-using Customer_Union.Models;
-using System.Net.Http.Json;
-using Customer_Union;
+using Customer_Union.Application.Dtos;
 using Customer_Union.Domain.Entities;
-using System.Net.WebSockets;
+using Customer_Union.IntegrationTest.Fixture;
+using System.Net.Http.Json;
 
 namespace Customer_Union.IntegrationTest;
 

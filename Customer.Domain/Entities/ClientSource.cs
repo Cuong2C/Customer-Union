@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Customer_Union.Domain.Entities;
+﻿namespace Customer_Union.Domain.Entities;
 
 public class ClientSource
 {

@@ -8,6 +8,6 @@ public interface IClientSourceRepository
     Task<ClientSource?> GetClientSourceByCodeAsync(string clientCode);
     Task AddClientSourceAsync(ClientSource clientSource);
     Task<int> UpdateClientSourceAsync(ClientSource clientSource);
-    Task<int> DeleteClientSourceAsync(string id);
+    Task<int> DeleteClientSourceAsync(string clientCode);
     Task<bool> IsValidClientSource(string clientCode);
 }

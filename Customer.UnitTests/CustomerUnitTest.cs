@@ -51,7 +51,7 @@ public class CustomerUnitTest
 
         var repo = new CustomerRepository(unitOfWork);
 
-        var customer1 = new Domain.Entities.Customer()
+        var customer1 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer",
@@ -73,7 +73,7 @@ public class CustomerUnitTest
         };
         customer1.SetAdditionalProperties("TestClientSource");
 
-        var customer2 = new Domain.Entities.Customer()
+        var customer2 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer2",
@@ -154,7 +154,7 @@ public class CustomerUnitTest
 
         var repo = new CustomerRepository(unitOfWork);
 
-        var customer1 = new Domain.Entities.Customer()
+        var customer1 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer",
@@ -176,7 +176,7 @@ public class CustomerUnitTest
         };
         customer1.SetAdditionalProperties("TestClientSource");
 
-        var customer2 = new Domain.Entities.Customer()
+        var customer2 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer2",
@@ -355,7 +355,7 @@ public class CustomerUnitTest
 
         var repo = new CustomerRepository(unitOfWork);
 
-        var customer1 = new Domain.Entities.Customer()
+        var customer1 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer",
@@ -377,7 +377,7 @@ public class CustomerUnitTest
         };
         customer1.SetAdditionalProperties("TestClientSource");
 
-        var customer2 = new Domain.Entities.Customer()
+        var customer2 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer2",
@@ -469,7 +469,7 @@ public class CustomerUnitTest
 
         var repo = new CustomerRepository(unitOfWork);
 
-        var customer1 = new Domain.Entities.Customer()
+        var customer1 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer",
@@ -491,7 +491,7 @@ public class CustomerUnitTest
         };
         customer1.SetAdditionalProperties("TestClientSource");
 
-        var customer2 = new Domain.Entities.Customer()
+        var customer2 = new Customer()
         {
             Id = Guid.NewGuid(),
             Name = "Test Customer2",

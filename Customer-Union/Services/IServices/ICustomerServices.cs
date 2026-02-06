@@ -1,5 +1,4 @@
-﻿using Customer_Union.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Customer_Union.Application.Dtos;
 
 namespace Customer_Union.Services.IServices
 {
@@ -13,7 +12,7 @@ namespace Customer_Union.Services.IServices
         Task<Results<Ok, NotFound>> IsNewVersionCustomerAsync(Guid id, string hashCode);
         Task<Results<Ok<HashCodeResponse>, BadRequest>> AddCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest);
         Task<Results<Ok<HashCodeResponse>, BadRequest>> UpdateCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest, Guid id);
-        Task<Results<Ok, BadRequest>> DeleteCustomerAsync(HttpContext httpContext, Guid id);
+        Task<IResult> DeleteCustomerAsync(HttpContext httpContext, Guid id);
 
     }
 }

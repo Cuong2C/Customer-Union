@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Customer.Application\Customer.Application.csproj" />
     <ProjectReference Include="..\Customer.Authentication\Customer.Authentication.csproj" />
     <ProjectReference Include="..\Customer.Authorization\Customer.Authorization.csproj" />
     <ProjectReference Include="..\Customer.Domain\Customer.Domain.csproj" />

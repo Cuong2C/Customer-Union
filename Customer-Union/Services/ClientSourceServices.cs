@@ -1,8 +1,4 @@
-﻿using Customer_Union.Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-
-namespace Customer_Union.Services;
+﻿namespace Customer_Union.Services;
 
 public class ClientSourceServices(IClientSourceRepository repository, IUnitOfWork unitOfWork, ILogger<ClientSourceServices> logger) : IClientSourceServices
 {
@@ -30,7 +26,6 @@ public class ClientSourceServices(IClientSourceRepository repository, IUnitOfWor
     {
         try
         {
-
             var result = await repository.DeleteClientSourceAsync(clientSourceCode);
             if (result == 0)
             {
