@@ -1,4 +1,4 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class GetCustomerByPhoneHandler(IGetCustomerByPhone getCustomerByPhone, ILogger<GetCustomerByPhoneHandler> logger, IMapper mapper)
 {

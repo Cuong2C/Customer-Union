@@ -1,6 +1,6 @@
 ﻿using Customer_Union.Application.Interfaces.ClientSources;
 
-namespace CustomerUnion.EndpointHandlers.ClientSourceHandlers;
+namespace Customer_Union.EndpointHandlers.ClientSourceHandlers;
 
 public class UpdateClientSourceHandler(IUpdateClientSource updateClientSource, ILogger<UpdateClientSourceHandler> logger, IMapper mapper)
 {

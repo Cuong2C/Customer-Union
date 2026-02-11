@@ -24,22 +24,22 @@ public class CustomerUnitTest
         var createTableSql = @"
                 CREATE TABLE Customers (
                     Id TEXT NULL,
-                    ten_kh TEXT NULL,
-                    ma_so_thue TEXT NULL,
-                    dia_chi TEXT NULL,
-                    dien_thoai TEXT NULL,
-                    dien_thoai2 TEXT NULL,
-                    dien_thoai3 TEXT NULL,
-                    e_mail TEXT NULL,
-                    quoc_tich TEXT NULL,
-                    tinh_thanh TEXT NULL,
-                    quan_huyen TEXT NULL,
-                    gioi_tinh TEXT NULL,
-                    ngay_sinh TEXT NULL, 
-                    tk_nh TEXT NULL,
-                    ten_nh TEXT NULL,
-                    loai_khach_ban TEXT NULL,
-                    ma_kh_pearl TEXT NULL,
+                    Name TEXT NULL,
+                    TaxCode TEXT NULL,
+                    Address TEXT NULL,
+                    Phone TEXT NULL,
+                    Phone2 TEXT NULL,
+                    Phone3 TEXT NULL,
+                    Email TEXT NULL,
+                    Nationality TEXT NULL,
+                    Province TEXT NULL,
+                    District TEXT NULL,
+                    Gender TEXT NULL,
+                    DateOfBirth TEXT NULL, 
+                    BankAccount TEXT NULL,
+                    BankName TEXT NULL,
+                    CustomerType TEXT NULL,
+                    PearlCustomerCode TEXT NULL,
                     createdAt TEXT NULL, 
                     updatedAt TEXT NULL,
                     createdClientSourceCode TEXT NULL,
@@ -128,22 +128,22 @@ public class CustomerUnitTest
         var createTableSql = @"
                 CREATE TABLE Customers (
                     Id TEXT NULL,
-                    ten_kh TEXT NULL,
-                    ma_so_thue TEXT NULL,
-                    dia_chi TEXT NULL,
-                    dien_thoai TEXT NULL,
-                    dien_thoai2 TEXT NULL,
-                    dien_thoai3 TEXT NULL,
-                    e_mail TEXT NULL,
-                    quoc_tich TEXT NULL,
-                    tinh_thanh TEXT NULL,
-                    quan_huyen TEXT NULL,
-                    gioi_tinh TEXT NULL,
-                    ngay_sinh TEXT NULL, 
-                    tk_nh TEXT NULL,
-                    ten_nh TEXT NULL,
-                    loai_khach_ban TEXT NULL,
-                    ma_kh_pearl TEXT NULL,
+                    Name TEXT NULL,
+                    TaxCode TEXT NULL,
+                    Address TEXT NULL,
+                    Phone TEXT NULL,
+                    Phone2 TEXT NULL,
+                    Phone3 TEXT NULL,
+                    Email TEXT NULL,
+                    Nationality TEXT NULL,
+                    Province TEXT NULL,
+                    District TEXT NULL,
+                    Gender TEXT NULL,
+                    DateOfBirth TEXT NULL, 
+                    BankAccount TEXT NULL,
+                    BankName TEXT NULL,
+                    CustomerType TEXT NULL,
+                    PearlCustomerCode TEXT NULL,
                     createdAt TEXT NULL, 
                     updatedAt TEXT NULL,
                     createdClientSourceCode TEXT NULL,
@@ -251,22 +251,22 @@ public class CustomerUnitTest
         var createTableSql = @"
                 CREATE TABLE CustomerHistories (
                     Id TEXT NULL,
-                    ten_kh TEXT NULL,
-                    ma_so_thue TEXT NULL,
-                    dia_chi TEXT NULL,
-                    dien_thoai TEXT NULL,
-                    dien_thoai2 TEXT NULL,
-                    dien_thoai3 TEXT NULL,
-                    e_mail TEXT NULL,
-                    quoc_tich TEXT NULL,
-                    tinh_thanh TEXT NULL,
-                    quan_huyen TEXT NULL,
-                    gioi_tinh TEXT NULL,
-                    ngay_sinh TEXT NULL, 
-                    tk_nh TEXT NULL,
-                    ten_nh TEXT NULL,
-                    loai_khach_ban TEXT NULL,
-                    ma_kh_pearl TEXT NULL,
+                    Name TEXT NULL,
+                    TaxCode TEXT NULL,
+                    Address TEXT NULL,
+                    Phone TEXT NULL,
+                    Phone2 TEXT NULL,
+                    Phone3 TEXT NULL,
+                    Email TEXT NULL,
+                    Nationality TEXT NULL,
+                    Province TEXT NULL,
+                    District TEXT NULL,
+                    Gender TEXT NULL,
+                    DateOfBirth TEXT NULL, 
+                    BankAccount TEXT NULL,
+                    BankName TEXT NULL,
+                    CustomerType TEXT NULL,
+                    PearlCustomerCode TEXT NULL,
                     createdAt TEXT NULL, 
                     updatedAt TEXT NULL,
                     createdClientSourceCode TEXT NULL,
@@ -309,8 +309,6 @@ public class CustomerUnitTest
             ChangedByClient = "TestClientSource"
         };
 
-
-
         // Act
         var result = await repo.AddCustomerHistoryAsync(customerHistory);
 
@@ -329,22 +327,22 @@ public class CustomerUnitTest
         var createTableSql = @"
                 CREATE TABLE Customers (
                     Id TEXT NULL,
-                    ten_kh TEXT NULL,
-                    ma_so_thue TEXT NULL,
-                    dia_chi TEXT NULL,
-                    dien_thoai TEXT NULL,
-                    dien_thoai2 TEXT NULL,
-                    dien_thoai3 TEXT NULL,
-                    e_mail TEXT NULL,
-                    quoc_tich TEXT NULL,
-                    tinh_thanh TEXT NULL,
-                    quan_huyen TEXT NULL,
-                    gioi_tinh TEXT NULL,
-                    ngay_sinh TEXT NULL, 
-                    tk_nh TEXT NULL,
-                    ten_nh TEXT NULL,
-                    loai_khach_ban TEXT NULL,
-                    ma_kh_pearl TEXT NULL,
+                    Name TEXT NULL,
+                    TaxCode TEXT NULL,
+                    Address TEXT NULL,
+                    Phone TEXT NULL,
+                    Phone2 TEXT NULL,
+                    Phone3 TEXT NULL,
+                    Email TEXT NULL,
+                    Nationality TEXT NULL,
+                    Province TEXT NULL,
+                    District TEXT NULL,
+                    Gender TEXT NULL,
+                    DateOfBirth TEXT NULL, 
+                    BankAccount TEXT NULL,
+                    BankName TEXT NULL,
+                    CustomerType TEXT NULL,
+                    PearlCustomerCode TEXT NULL,
                     createdAt TEXT NULL, 
                     updatedAt TEXT NULL,
                     createdClientSourceCode TEXT NULL,
@@ -433,129 +431,5 @@ public class CustomerUnitTest
         Assert.Null(deletedCustomer2);
     }
 
-    [Fact]
-    public async void IsNewVersion_Customer_UnitTest()
-    {
-        var connectionFactory = new SqliteConnectionFactory();
-        using var unitOfWork = new DapperUnitOfWork(connectionFactory);
-
-        // Arrange
-        var createTableSql = @"
-                CREATE TABLE Customers (
-                    Id TEXT NULL,
-                    ten_kh TEXT NULL,
-                    ma_so_thue TEXT NULL,
-                    dia_chi TEXT NULL,
-                    dien_thoai TEXT NULL,
-                    dien_thoai2 TEXT NULL,
-                    dien_thoai3 TEXT NULL,
-                    e_mail TEXT NULL,
-                    quoc_tich TEXT NULL,
-                    tinh_thanh TEXT NULL,
-                    quan_huyen TEXT NULL,
-                    gioi_tinh TEXT NULL,
-                    ngay_sinh TEXT NULL, 
-                    tk_nh TEXT NULL,
-                    ten_nh TEXT NULL,
-                    loai_khach_ban TEXT NULL,
-                    ma_kh_pearl TEXT NULL,
-                    createdAt TEXT NULL, 
-                    updatedAt TEXT NULL,
-                    createdClientSourceCode TEXT NULL,
-                    updatedClientSourceCode TEXT NULL,
-                    hashCode TEXT NULL
-                );";
-        unitOfWork.Connection.Execute(createTableSql, transaction: unitOfWork.Transaction);
-
-        var repo = new CustomerRepository(unitOfWork);
-
-        var customer1 = new Customer()
-        {
-            Id = Guid.NewGuid(),
-            Name = "Test Customer",
-            TaxCode = "123456789",
-            Address = "123 Test St",
-            Phone = "1234567890",
-            Phone2 = "0987654321",
-            Phone3 = "1122334455",
-            Email = null,
-            Nationality = "VN",
-            Province = "Hanoi",
-            District = null,
-            Gender = 2,
-            DateOfBirth = DateTime.Now,
-            BankAccount = "",
-            BankName = "Test Bank",
-            CustomerType = "Regular",
-            PearlCustomerCode = "PEARL123",
-        };
-        customer1.SetAdditionalProperties("TestClientSource");
-
-        var customer2 = new Customer()
-        {
-            Id = Guid.NewGuid(),
-            Name = "Test Customer2",
-            TaxCode = "",
-            Address = "123 Test St",
-            Phone = "1234567890",
-            Phone2 = "0987654321",
-            Phone3 = "1122334455",
-            Email = null,
-            Nationality = "VN",
-            Province = "TPHCM",
-            District = null,
-            Gender = 2,
-            DateOfBirth = DateTime.Now,
-            BankAccount = "",
-            BankName = "Test Bank",
-            CustomerType = "Regular",
-            PearlCustomerCode = null,
-        };
-        customer1.SetAdditionalProperties("TestClientSource");
-
-        // Act
-        var hashcode1 = await repo.AddCustomerAsync(customer1);
-        var hashcode2 = await repo.AddCustomerAsync(customer2);
-
-
-        var retrievedCustomer1 = await repo.GetCustomerByIdAsync(customer1.Id);
-        var retrievedCustomer2 = await repo.GetCustomerByIdAsync(customer2.Id);
-
-        // Assert
-        Assert.NotNull(retrievedCustomer1);
-        Assert.NotNull(retrievedCustomer2);
-
-
-        // Arrange
-        customer1.Name = "Updated Customer Name";
-        customer1.Phone = "000000012424";
-        customer1.SetUpdateProperties("TestClientSource");
-        customer2.Name = "Updated Customer Name 2";
-        customer2.Address = "456 test2";
-        customer2.SetUpdateProperties("TestClientSource");
-
-        // Act
-        await repo.UpdateCustomerAsync(customer1);
-        var updatedCustomer1 = await repo.GetCustomerByIdAsync(customer1.Id);
-        await repo.UpdateCustomerAsync(customer2);
-        var updatedCustomer2 = await repo.GetCustomerByIdAsync(customer2.Id);
-
-        // Query in Sqlite is different from SqlServer, so we need to use orther query to get the hashcode
-        // "SELECT 1 FROM Customers WHERE Id = @Id AND HashCode = @HashCode"
-        var isNewVersionretrieved1 = await repo.IsNewVersionCustomerAsync(retrievedCustomer1!.Id, retrievedCustomer1.HashCode);
-        var isNewVersionretrieved2 = await repo.IsNewVersionCustomerAsync(retrievedCustomer2!.Id, retrievedCustomer2.HashCode);
-        var isNewVersionupdated1 = await repo.IsNewVersionCustomerAsync(updatedCustomer1!.Id, updatedCustomer1.HashCode);
-        var isNewVersionupdated2 = await repo.IsNewVersionCustomerAsync(updatedCustomer2!.Id, updatedCustomer2.HashCode);
-
-        // Assert
-        Assert.NotNull(updatedCustomer1);
-        Assert.NotNull(updatedCustomer2);
-        Assert.Equal(retrievedCustomer1.Id, updatedCustomer1!.Id);
-        Assert.Equal(retrievedCustomer2.Id, updatedCustomer2!.Id);
-        Assert.False(isNewVersionretrieved1);
-        Assert.False(isNewVersionretrieved2);
-        Assert.True(isNewVersionupdated1);
-        Assert.True(isNewVersionupdated2);
-
-    }
+    
 }

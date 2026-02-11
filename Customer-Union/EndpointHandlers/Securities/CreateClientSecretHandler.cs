@@ -2,7 +2,7 @@
 
 namespace Customer_Union.EndpointHandlers.Securities;
 
-public class CreateClientSecretHandler(ICreateClientSecret createClientSecret)
+public class CreateClientSecretHandler(ICreateClientSecret createClientSecret, ILogger<CreateClientSecretHandler> logger)
 {
     public async Task<Results<Ok<CreateClientSecretResponse>, BadRequest>> CreateClientSecretAsync(CreateClientSecretRequest createClientSecretRequest)
     {
@@ -18,6 +18,8 @@ public class CreateClientSecretHandler(ICreateClientSecret createClientSecret)
             ClientCode = createClientSecretRequest.ClientCode,
             ClientSecret = result
         };
+        
+        logger.LogInformation("Client secret created for client code: {ClientCode}", createClientSecretRequest.ClientCode);
 
         return TypedResults.Ok(response);
     }

@@ -2,5 +2,5 @@
 
 public interface IDeleteCustomer
 {
-    Task<int> DeleteCustomerAsync(Guid id);
+    Task<int> DeleteCustomerAsync(Guid id, string clientSourceCode);
 }

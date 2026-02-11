@@ -1,5 +1,4 @@
-﻿using Customer_Union.Authentication;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Customer_Union.BootStraping;

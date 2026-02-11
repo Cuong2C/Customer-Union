@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Customer_Union.Configuration;
+using Customer_Union.Infrastructure.Securities.Auth;
 using Microsoft.Extensions.Options;
 using Serilog;
 
@@ -68,9 +69,12 @@ public static class ApplicationServiceExtensions
         builder.Services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-            options.InstanceName = "Customer_";
 
         });
+
+        builder.Services.AddHealthChecks()
+            .AddSqlServer(connectionString)
+            .AddRedis(builder.Configuration.GetConnectionString("RedisConnection")!);
 
         return builder;
     }

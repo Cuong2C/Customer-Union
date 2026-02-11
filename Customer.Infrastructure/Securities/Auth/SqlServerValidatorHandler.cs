@@ -1,7 +1,8 @@
 ﻿using Dapper;
 using Customer_Union.Infrastructure.Data;
+using Customer_Union.Authentication;
 
-namespace Customer_Union.Authentication;
+namespace Customer_Union.Infrastructure.Securities.Auth;
 
 public class SqlServerValidatorHandler : ISqlServerValidatorHandler
 {

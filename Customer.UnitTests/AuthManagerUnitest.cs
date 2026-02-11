@@ -1,15 +1,10 @@
-﻿using Dapper;
-using Customer_Union.Authentication;
-using Customer_Union.Domain.Entities;
+﻿using Customer_Union.Domain.Entities;
 using Customer_Union.Infrastructure.Data;
 using Customer_Union.Infrastructure.Repository;
+using Customer_Union.Infrastructure.Securities.Auth;
+using Dapper;
 using SQLitePCL;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Customer_Union.UnitTests
 {

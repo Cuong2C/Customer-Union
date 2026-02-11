@@ -1,8 +1,8 @@
 ﻿using Customer_Union.Application.Interfaces.Securities;
 
-namespace CustomerUnion.EndpointHandlers.Securities;
+namespace Customer_Union.EndpointHandlers.Securities;
 
-public class GenerateTokenHandler(IGenrateToken genrateToken)
+public class GenerateTokenHandler(IGenrateToken genrateToken, ILogger<GenerateTokenHandler> logger)
 {
     public async Task<Results<Ok<GenrateTokenResponse>, BadRequest>> GenerateTokenAsync(GenrateTokenRequest genrateTokenRequest)
     {
@@ -18,6 +18,8 @@ public class GenerateTokenHandler(IGenrateToken genrateToken)
             ClientCode = genrateTokenRequest.ClientCode,
             Token = result
         };
+
+        logger.LogInformation("Token generated successfully for ClientCode: {ClientCode}", genrateTokenRequest.ClientCode);
 
         return TypedResults.Ok(response);
     }

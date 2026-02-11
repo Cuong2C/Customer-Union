@@ -8,7 +8,7 @@ public class CheckNewVersionCustomerHandler(ICheckNewVersionCustomer checkNewVer
 
         if (!result)
         {
-            logger.LogWarning($"Customer with id {id} is not a new version.");
+            logger.LogWarning($"This customer version with id {id} is not found.");
             return TypedResults.NotFound();
         }
 

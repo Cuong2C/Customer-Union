@@ -1,4 +1,4 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class AddCustomerHandler(IAddCustomer addCustomer, ILogger<AddCustomerHandler> logger, IMapper mapper)
 {

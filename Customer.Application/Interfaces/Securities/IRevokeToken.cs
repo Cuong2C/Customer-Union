@@ -2,5 +2,5 @@
 
 public interface IRevokeToken
 {
-    Task<bool> RevokeTokenAsync(string clientCode, string clientSecret, string? jti);
+    Task<bool> RevokeTokenAsync(string clientCode, string clientSecret);
 }

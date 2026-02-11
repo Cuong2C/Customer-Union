@@ -1,9 +1,9 @@
 ﻿using Customer_Union.Application.Dtos;
 using Customer_Union.EndpointHandlers.CustomerHandlers;
 using Customer_Union.EndpointHandlers.Securities;
-using CustomerUnion.EndpointHandlers.ClientSourceHandlers;
-using CustomerUnion.EndpointHandlers.CustomerHandlers;
-using CustomerUnion.EndpointHandlers.Securities;
+using Customer_Union.EndpointHandlers.ClientSourceHandlers;
+using Customer_Union.EndpointHandlers.CustomerHandlers;
+using Customer_Union.EndpointHandlers.Securities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,7 +52,7 @@ public static class LongbeachApi
         v1.MapPost("/auth/tokens",
             [AllowAnonymous] ([FromServices] GenerateTokenHandler handler, GenrateTokenRequest genrateTokenRequest) => handler.GenerateTokenAsync(genrateTokenRequest));
         v1.MapPost("/auth/tokens/revoke",
-            [Authorize] ([FromServices] RevokeTokenHandler handler, RevokeTokenRequest revokeTokenRequest, HttpContext httpContext) => handler.RevokeTokenAsync(revokeTokenRequest, httpContext));
+            [Authorize] ([FromServices] RevokeTokenHandler handler, RevokeTokenRequest revokeTokenRequest) => handler.RevokeTokenAsync(revokeTokenRequest));
         v1.MapPost("/auth/client-secrets",
             [AllowAnonymous] ([FromServices] CreateClientSecretHandler handler, CreateClientSecretRequest clientSecretRequest) => handler.CreateClientSecretAsync(clientSecretRequest));                           
 

@@ -1,4 +1,4 @@
-﻿namespace CustomerUnion.EndpointHandlers.ClientSourceHandlers;
+﻿namespace Customer_Union.EndpointHandlers.ClientSourceHandlers;
 
 public class GetClientSourceByCodeHandler(ILogger<GetClientSourceByCodeHandler> logger, IGetClientSourceByCode getClientSourceByCode, IMapper mapper)
 {

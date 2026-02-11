@@ -1,4 +1,4 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class GetCustomerByPearlCustomerCodeHandler(IGetCustomerByPearlCode getCustomerByPearlCode, ILogger<GetCustomerByPearlCustomerCodeHandler> logger, IMapper mapper)
 {

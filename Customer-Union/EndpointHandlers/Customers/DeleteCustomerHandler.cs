@@ -1,27 +1,21 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class DeleteCustomerHandler(IDeleteCustomer deleteCustomer, ILogger<DeleteCustomerHandler> logger, IUnitOfWork unitOfWork)
 {
     public async Task<IResult> DeleteCustomerAsync(HttpContext httpContext, Guid id)
     {
-        try 
-        { 
-            var result = await deleteCustomer.DeleteCustomerAsync(id);
-            if (result == 0)
-            {
-                logger.LogError($"Customer with id {id} not found.");
-                return Results.StatusCode(StatusCodes.Status404NotFound);
-            }
+        string clientSourceCode = httpContext.User.FindFirst("ClientSourceCode")!.Value;
 
-            unitOfWork.Commit();
-            logger.LogInformation($"Customer with id {id} deleted successfully.");
-            return TypedResults.Ok();
-        }
-        catch (Exception ex)
+        var result = await deleteCustomer.DeleteCustomerAsync(id, clientSourceCode);
+
+        if (result == 0)
         {
-            unitOfWork.Rollback();
-            logger.LogError($"Failed to delete customer: {ex.Message}");
-            return TypedResults.BadRequest();
+            logger.LogError($"Customer with id {id} not found.");
+            return Results.StatusCode(StatusCodes.Status404NotFound);
         }
+
+        unitOfWork.Commit();
+        logger.LogInformation($"Customer with id {id} deleted successfully.");
+        return TypedResults.Ok();
     }
 }

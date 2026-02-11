@@ -1,6 +1,6 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
-public class GetCustomersHandler(IGetCustomer getCustomer, ILogger<GetCustomersHandler> logger, IMapper mapper)
+public class GetCustomersHandler(IGetCustomers getCustomer, ILogger<GetCustomersHandler> logger, IMapper mapper)
 {
     public async Task<Results<Ok<PagedResult<CustomerResponse>>, NotFound>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
     {

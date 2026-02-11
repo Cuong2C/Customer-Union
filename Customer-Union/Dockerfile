@@ -4,31 +4,30 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 5000
-EXPOSE 5001
+EXPOSE 8080
+EXPOSE 8081
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Longbeach-Customer/Longbeach.Api.csproj", "Longbeach-Customer/"]
-COPY ["Longbeach.Authentication/Longbeach.Authentication.csproj", "Longbeach.Authentication/"]
-COPY ["Longbeach.Infrastructure/Longbeach.Infrastructure.csproj", "Longbeach.Infrastructure/"]
-COPY ["Longbeach.Domain/Longbeach.Domain.csproj", "Longbeach.Domain/"]
-COPY ["Longbeach.Authorization/Longbeach.Authorization.csproj", "Longbeach.Authorization/"]
-RUN dotnet restore "./Longbeach-Customer/Longbeach.Api.csproj"
+COPY ["Customer-Union/Customer.Api.csproj", "Customer-Union/"]
+COPY ["Customer.Application/Customer.Application.csproj", "Customer.Application/"]
+COPY ["Customer.Domain/Customer.Domain.csproj", "Customer.Domain/"]
+COPY ["Customer.Infrastructure/Customer.Infrastructure.csproj", "Customer.Infrastructure/"]
+RUN dotnet restore "./Customer-Union/Customer.Api.csproj"
 COPY . .
-WORKDIR "/src/Longbeach-Customer"
-RUN dotnet build "./Longbeach.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Customer-Union"
+RUN dotnet build "./Customer.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Longbeach.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Customer.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Longbeach.Api.dll"]
+ENTRYPOINT ["dotnet", "Customer.Api.dll"]

@@ -1,4 +1,4 @@
-﻿namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class GetCustomerByTaxCodeHandler(IGetCustomerByTaxCode getCustomerByTaxCode, ILogger<GetCustomerByTaxCodeHandler> logger, IMapper mapper)
 {

@@ -84,6 +84,7 @@ public class AuthManagerServices(IClientCredentialRepository clientCredentialRep
             logger.LogError($"Invalid  pair (client code and client secret): {revokeTokenRequest.ClientCode}");
             return TypedResults.BadRequest();
         }
+
         string clientSourceCode = httpContext.User.FindFirst("ClientSourceCode")!.Value;
         if (clientSourceCode != revokeTokenRequest.ClientCode)
         {

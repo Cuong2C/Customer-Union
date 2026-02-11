@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using static StackExchange.Redis.Role;
-
-namespace CustomerUnion.EndpointHandlers.CustomerHandlers;
+﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class GetCustomerByIdHandler(IGetCustomerById getCustomerById, ILogger<GetCustomerByIdHandler> logger, IMapper mapper)
 {
