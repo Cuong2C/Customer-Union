@@ -1,7 +1,4 @@
-﻿using Customer_Union.Application.Dtos;
-using Customer_Union.EndpointHandlers.CustomerHandlers;
-using Customer_Union.EndpointHandlers.Securities;
-using Customer_Union.EndpointHandlers.ClientSourceHandlers;
+﻿using Customer_Union.EndpointHandlers.ClientSourceHandlers;
 using Customer_Union.EndpointHandlers.CustomerHandlers;
 using Customer_Union.EndpointHandlers.Securities;
 using Microsoft.AspNetCore.Authorization;

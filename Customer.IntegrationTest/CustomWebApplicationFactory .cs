@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 
 namespace Customer_Union.IntegrationTest;
@@ -19,7 +18,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 .AddEnvironmentVariables()
                 .Build();
 
-            var connectionString = "Server=localhost,14333;Database=TestDb;User Id=sa;Password=MyPassword123@;TrustServerCertificate=True";
+            var connectionString = "Server=localhost,1435;Database=TestDb;User Id=sa;Password=SqlDocker123;TrustServerCertificate=True";
 
             var descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(IDbConnectionFactory));
             if (descriptor != null) services.Remove(descriptor);

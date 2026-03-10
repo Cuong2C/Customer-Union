@@ -8,7 +8,7 @@ public static class TestDatabaseInitializer
 {
     public static async Task InitializeDatabaseAsync()
     {
-        var baseConnectionString = "Server=localhost,14333;User Id=sa;Password=MyPassword123@;TrustServerCertificate=True";
+        var baseConnectionString = "Server=localhost,1435;User Id=sa;Password=SqlDocker123;TrustServerCertificate=True";
 
         //  connect and create the database if it does not exist
         var masterBuilder = new SqlConnectionStringBuilder(baseConnectionString)

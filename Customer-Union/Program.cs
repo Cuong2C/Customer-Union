@@ -16,7 +16,7 @@ if (app.Environment.IsDevelopment())
 app.UseWhen(context =>
 {
     var isClientSecretsPost = context.Request.Path.StartsWithSegments("/api/v1/longbeach/auth/client-secrets");
-    var isClientSource = context.Request.Path.StartsWithSegments("/api/v1/longbeach/auth/client-sources") && context.Request.Method != "GET";
+    var isClientSource = context.Request.Path.StartsWithSegments("/api/v1/longbeach/client-sources") && context.Request.Method != "GET";
 
     return isClientSecretsPost || isClientSource;
 }, appBuilder =>

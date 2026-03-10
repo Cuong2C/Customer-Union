@@ -2,7 +2,7 @@
 
 namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
-public class UpdateCustomerHandler(IUpdateCustomer updateCustomer, Logger<UpdateCustomerHandler> logger, IMapper mapper)
+public class UpdateCustomerHandler(IUpdateCustomer updateCustomer, ILogger<UpdateCustomerHandler> logger, IMapper mapper)
 {
     public async Task<Results<Ok<HashCodeResponse>, BadRequest>> UpdateCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest, Guid id)
     {

@@ -3,6 +3,7 @@ using Customer_Union.Application.Dtos;
 using Customer_Union.Domain.Entities;
 using Customer_Union.IntegrationTest.Fixture;
 using System.Net.Http.Json;
+using System.Net;
 
 namespace Customer_Union.IntegrationTest;
 
@@ -46,13 +47,13 @@ public class IntegrationTest
         var createClientSecretResponseNew = await _httpClient.PostAsJsonAsync("/api/v1/longbeach/auth/client-secrets", clientSecretRequest5);
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.OK, createClientSecretResponse1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, createClientSecretResponse2.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, createClientSecretResponse3.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, createClientSecretResponse4.StatusCode);
-        Assert.True(System.Net.HttpStatusCode.OK.Equals(deleteclientSourceNew.StatusCode) || System.Net.HttpStatusCode.NotFound.Equals(deleteclientSourceNew.StatusCode));
-        Assert.Equal(System.Net.HttpStatusCode.OK, addClientSourceResponse.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, createClientSecretResponseNew.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, createClientSecretResponse1.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, createClientSecretResponse2.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, createClientSecretResponse3.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, createClientSecretResponse4.StatusCode);
+        Assert.True(HttpStatusCode.OK.Equals(deleteclientSourceNew.StatusCode) || HttpStatusCode.NotFound.Equals(deleteclientSourceNew.StatusCode));
+        Assert.Equal(HttpStatusCode.OK, addClientSourceResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, createClientSecretResponseNew.StatusCode);
 
         // Arrange
         var clientSecretResponse1 = await createClientSecretResponse1.Content.ReadFromJsonAsync<CreateClientSecretResponse>();
@@ -113,13 +114,13 @@ public class IntegrationTest
         var genrateTokenResponseFailed4 = await _httpClient.PostAsJsonAsync("/api/v1/longbeach/auth/tokens", genrateTokenRequestFailed4);
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.OK, genrateTokenResponse1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, genrateTokenResponse2.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, genrateTokenResponseClientSourceNew.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, genrateTokenResponseFailed1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, genrateTokenResponseFailed2.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, genrateTokenResponseFailed3.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, genrateTokenResponseFailed4.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, genrateTokenResponse1.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, genrateTokenResponse2.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, genrateTokenResponseClientSourceNew.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, genrateTokenResponseFailed1.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, genrateTokenResponseFailed2.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, genrateTokenResponseFailed3.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, genrateTokenResponseFailed4.StatusCode);
 
         // Arrange
         var tokenClient01 = await genrateTokenResponse1.Content.ReadFromJsonAsync<GenrateTokenResponse>();
@@ -147,9 +148,9 @@ public class IntegrationTest
         var clientSourceList = await getAllClientSourcesResponse.Content.ReadFromJsonAsync<IEnumerable<ClientSource>>();
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.OK, getClientSourceNewResponse.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.Unauthorized, getClientSource01.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, getAllClientSourcesResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, getClientSourceNewResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, getClientSource01.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, getAllClientSourcesResponse.StatusCode);
         Assert.NotNull(clientSourceNewResponse);
         Assert.Equal(clientSourceNew.ClientCode, clientSourceNewResponse!.ClientCode);
         Assert.NotNull(clientSourceList);
@@ -239,15 +240,15 @@ public class IntegrationTest
         var cus1ByPearlInDb = await getCustomer1PearlCodeResponse.Content.ReadFromJsonAsync<CustomerResponse>();
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.OK, hashCodeCus1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.Unauthorized, hashCodeNew.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, hashCodeCus2.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, getCustomer2ByPhoneResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, hashCodeCus1.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, hashCodeNew.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, hashCodeCus2.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, getCustomer2ByPhoneResponse.StatusCode);
         Assert.True(cus2ByPhoneInDB!.Any());
         Assert.Equal(customerRequest2.Phone, cus2InEnumrable.Phone);
 
-        Assert.Equal(System.Net.HttpStatusCode.OK, getCustomer1ByTaxCodeResponse.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, getCustomer1PearlCodeResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, getCustomer1ByTaxCodeResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, getCustomer1PearlCodeResponse.StatusCode);
         Assert.Equal(hashCodeCus1Content!.HashCode, cus1ByTaxInDb!.HashCode);
         Assert.Equal(hashCodeCus1Content!.HashCode, cus1ByPearlInDb!.HashCode);
         Assert.Equal(cus1ByTaxInDb.Id, cus1ByTaxInDb!.Id);
@@ -322,13 +323,13 @@ public class IntegrationTest
         var newClientSecretResponse2 = await createNewClientSecretResponse2.Content.ReadFromJsonAsync<CreateClientSecretResponse>();
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, failedUpdateCus2.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, succesAfterUpdateCus1.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, failedUpdateCus2.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, succesAfterUpdateCus1.StatusCode);
         Assert.NotNull(HashCode1AfterUpdate);
         Assert.NotEqual(HashCode1AfterUpdate.HashCode, cus1ByTaxInDb.HashCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, succesGetAfterUpdateCus1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, revokeTokenResponse1.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, revokeTokenResponse2.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, succesGetAfterUpdateCus1.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, revokeTokenResponse1.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, revokeTokenResponse2.StatusCode);
         Assert.NotNull(newClientSecretResponse2);
 
         // Arrange
@@ -360,11 +361,11 @@ public class IntegrationTest
         var getCustomerAfterDelete = await _httpClient.SendAsync(requestGetClientSource);
 
         // Assert
-        Assert.Equal(System.Net.HttpStatusCode.BadRequest, newGenrateTokenResponseFromOldClientSecret.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, newGenrateTokenResponseFromNewClientSecret.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.Unauthorized, deleteCus1ResponseByRevokedToken.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.OK, deleteCus1ResponseByValidToken.StatusCode);
-        Assert.Equal(System.Net.HttpStatusCode.NotFound, getCustomerAfterDelete.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, newGenrateTokenResponseFromOldClientSecret.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, newGenrateTokenResponseFromNewClientSecret.StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, deleteCus1ResponseByRevokedToken.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, deleteCus1ResponseByValidToken.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, getCustomerAfterDelete.StatusCode);
 
     }
 }

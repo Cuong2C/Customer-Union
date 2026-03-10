@@ -69,7 +69,7 @@ public class ClientSourceRepository(IUnitOfWork unitOfWork) : IClientSourceRepos
             transaction: unitOfWork.Transaction);
     }
 
-    public async Task<bool> IsValidClientSource(string clientCode)
+    public async Task<bool> IsExistClientSource(string clientCode)
     {
         var connection = unitOfWork.Connection;
         return await connection.ExecuteScalarAsync<bool>(

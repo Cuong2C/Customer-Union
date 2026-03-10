@@ -14,7 +14,7 @@ public class CreateClientSecret(IClientCredentialRepository clientCredentialRepo
             logger.LogError("Client code is empty");
             return string.Empty;
         }
-        if (!await clientSourceRepository.IsValidClientSource(clientCode))
+        if (!await clientSourceRepository.IsExistClientSource(clientCode))
         {
             logger.LogError($"Client source with code {clientCode} does not valid.");
             return string.Empty;

@@ -1,6 +1,6 @@
 ﻿namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
-public class DeleteCustomerHandler(IDeleteCustomer deleteCustomer, ILogger<DeleteCustomerHandler> logger, IUnitOfWork unitOfWork)
+public class DeleteCustomerHandler(IDeleteCustomer deleteCustomer, ILogger<DeleteCustomerHandler> logger)
 {
     public async Task<IResult> DeleteCustomerAsync(HttpContext httpContext, Guid id)
     {
@@ -14,7 +14,6 @@ public class DeleteCustomerHandler(IDeleteCustomer deleteCustomer, ILogger<Delet
             return Results.StatusCode(StatusCodes.Status404NotFound);
         }
 
-        unitOfWork.Commit();
         logger.LogInformation($"Customer with id {id} deleted successfully.");
         return TypedResults.Ok();
     }

@@ -8,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace Customer_Union.Infrastructure.Securities;
 
-public class RevokeToken(IClientCredentialRepository clientCredentialRepository, ITokenAuthenticationServices tokenAuthenticationServices, HttpContext httpContext, ILogger<RevokeToken> logger) : IRevokeToken
+public class RevokeToken(IClientCredentialRepository clientCredentialRepository, ITokenAuthenticationServices tokenAuthenticationServices, IHttpContextAccessor httpContextAccessor, ILogger<RevokeToken> logger) : IRevokeToken
 {
     public async Task<bool> RevokeTokenAsync(string clientCode, string clientSecret)
     {
@@ -18,14 +18,14 @@ public class RevokeToken(IClientCredentialRepository clientCredentialRepository,
             return false;
         }
 
-        string clientSourceCode = httpContext.User.FindFirst("ClientSourceCode")!.Value;
+        string clientSourceCode = httpContextAccessor.HttpContext.User.FindFirst("ClientSourceCode")!.Value;
         if (clientSourceCode != clientCode)
         {
             logger.LogError($"Client source code of token ({clientSourceCode}) does not match with the request client code in body {clientCode}");
             return false;
         }
 
-        var jti = httpContext.User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+        var jti = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
 
         var result = tokenAuthenticationServices.RevokeTokenAsync(jti!);
 

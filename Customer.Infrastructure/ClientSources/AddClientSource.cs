@@ -16,7 +16,7 @@ namespace Customer_Union.Infrastructure.ClientSources
                 return false;
             }
 
-            var existingClientSource = await repository.IsValidClientSource(clientSource.ClientCode);
+            var existingClientSource = await repository.IsExistClientSource(clientSource.ClientCode);
             if (existingClientSource)
             {
                 logger.LogWarning($"Client source with code {clientSource.ClientCode} already exists.");

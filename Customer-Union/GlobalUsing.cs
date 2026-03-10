@@ -7,8 +7,6 @@ global using Customer_Union.Domain.IRepository;
 global using Customer_Union.Infrastructure.Data;
 global using Customer_Union.Infrastructure.Repository;
 global using Customer_Union.Middleware;
-global using Customer_Union.Services;
-global using Customer_Union.Services.IServices;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using Customer_Union.Application.Interfaces.ClientSources;
 global using Customer_Union.Application.Interfaces.Customers;

@@ -6,7 +6,7 @@ services:
         SA_PASSWORD: "SqlDocker123"
         ACCEPT_EULA: "Y"
      ports:
-       - "1435:1435"
+       - "1435:1433"
      volumes:
        - sqlserver_volume:/var/opt/mssql 
      healthcheck:

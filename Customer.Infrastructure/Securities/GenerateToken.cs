@@ -1,14 +1,12 @@
-﻿using Customer_Union.Application.Dtos;
-using Customer_Union.Application.Interfaces.Securities;
+﻿using Customer_Union.Application.Interfaces.Securities;
 using Customer_Union.Authentication;
 using Customer_Union.Domain.IRepository;
 using Customer_Union.Infrastructure.Data;
-using Customer_Union.Infrastructure.Securities.Auth;
 using Microsoft.Extensions.Logging;
 
 namespace Customer_Union.Infrastructure.Securities;
 
-public class GenrateToken(IClientCredentialRepository clientCredentialRepository, ITokenAuthenticationServices tokenAuthenticationServices, IUnitOfWork unitOfWork, ILogger<GenrateToken> logger) : IGenrateToken
+public class GenerateToken(IClientCredentialRepository clientCredentialRepository, ITokenAuthenticationServices tokenAuthenticationServices, IUnitOfWork unitOfWork, ILogger<GenerateToken> logger) : IGenerateToken
 {
     public async Task<string> GenerateTokenAsync(string clientCode, string clientSecret)
     {

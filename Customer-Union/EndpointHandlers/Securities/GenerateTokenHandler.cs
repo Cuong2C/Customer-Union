@@ -2,7 +2,7 @@
 
 namespace Customer_Union.EndpointHandlers.Securities;
 
-public class GenerateTokenHandler(IGenrateToken genrateToken, ILogger<GenerateTokenHandler> logger)
+public class GenerateTokenHandler(IGenerateToken genrateToken, ILogger<GenerateTokenHandler> logger)
 {
     public async Task<Results<Ok<GenrateTokenResponse>, BadRequest>> GenerateTokenAsync(GenrateTokenRequest genrateTokenRequest)
     {

@@ -9,5 +9,5 @@ public interface IClientSourceRepository
     Task AddClientSourceAsync(ClientSource clientSource);
     Task<int> UpdateClientSourceAsync(ClientSource clientSource);
     Task<int> DeleteClientSourceAsync(string clientCode);
-    Task<bool> IsValidClientSource(string clientCode);
+    Task<bool> IsExistClientSource(string clientCode);
 }
