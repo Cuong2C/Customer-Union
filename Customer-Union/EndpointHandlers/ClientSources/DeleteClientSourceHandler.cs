@@ -2,12 +2,12 @@
 
 public class DeleteClientSourceHandler(IDeleteClientSource deleteClientSource, ILogger<DeleteClientSourceHandler> logger)
 {
-    public async Task<Results<Ok, NotFound>> DeleteClientSourceAsync(string clientSourceCode)
+    public async Task<IResult> DeleteClientSourceAsync(string clientSourceCode)
     {
         var result = await deleteClientSource.DeleteClientSourceAsync(clientSourceCode);
         if (!result)
         {
-            return TypedResults.NotFound();
+            throw new NotFoundException($"Client source with code {clientSourceCode} not found.");
         }
 
         logger.LogInformation($"Client source with code {clientSourceCode} deleted successfully.");

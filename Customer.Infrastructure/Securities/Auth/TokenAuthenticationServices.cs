@@ -56,17 +56,9 @@ public class TokenAuthenticationServices(string issuerSigningKey, IDbConnectionF
             ClockSkew = TimeSpan.Zero
         };
 
-        try
-        {
-            principal = handler.ValidateToken(tokenValue, validationParameters, out token);
-            return true;
-        }
-        catch (Exception)
-        {
-            principal = null;
-            token = null;
-            return false;
-        }
+        principal = handler.ValidateToken(tokenValue, validationParameters, out token);
+        return true;
+     
     }
 
     public bool RevokeTokenAsync(string jti)

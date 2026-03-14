@@ -1,17 +1,15 @@
-﻿using Customer_Union.Application.Interfaces.ClientSources;
-
-namespace Customer_Union.EndpointHandlers.ClientSourceHandlers;
+﻿namespace Customer_Union.EndpointHandlers.ClientSourceHandlers;
 
 public class UpdateClientSourceHandler(IUpdateClientSource updateClientSource, ILogger<UpdateClientSourceHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok, BadRequest>> UpdateClientSourceAsync(ClientSourceRequest clientSourceRequest)
+    public async Task<IResult> UpdateClientSourceAsync(ClientSourceRequest clientSourceRequest)
     {
         var clientSource = mapper.Map<ClientSource>(clientSourceRequest);
 
         var result = await updateClientSource.UpdateClientSourceAsync(clientSource);
         if (!result)
         {
-            return TypedResults.BadRequest();
+            throw new BadRequestException($"Failed to update client source with code: {clientSource.ClientCode}");
         }
 
 

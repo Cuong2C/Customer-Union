@@ -11,7 +11,7 @@ public class DeleteCustomerHandler(IDeleteCustomer deleteCustomer, ILogger<Delet
         if (result == 0)
         {
             logger.LogError($"Customer with id {id} not found.");
-            return Results.StatusCode(StatusCodes.Status404NotFound);
+            throw new NotFoundException($"Customer with id {id} not found.");
         }
 
         logger.LogInformation($"Customer with id {id} deleted successfully.");

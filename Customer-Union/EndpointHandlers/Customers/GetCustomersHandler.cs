@@ -2,13 +2,13 @@
 
 public class GetCustomersHandler(IGetCustomers getCustomer, ILogger<GetCustomersHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok<PagedResult<CustomerResponse>>, NotFound>> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
+    public async Task<IResult> GetCustomersAsync(DateTime? cursorDate, Guid? cursorId, int pageSize = 20, string direction = "next")
     {
         var result = await getCustomer.GetCustomersAsync(cursorDate, cursorId, pageSize, direction);
         if (result.Items.Count == 0)
         {
             logger.LogInformation("No customers found for the given cursorDate: {CursorDate}, cursorId: {CursorId}", cursorDate, cursorId);
-            return TypedResults.NotFound();
+            throw new NotFoundException("No customers found for the given cursor.");
         }
 
         var customerResponses = mapper.Map<PagedResult<CustomerResponse>>(result.Items);

@@ -4,7 +4,7 @@ namespace Customer_Union.EndpointHandlers.CustomerHandlers;
 
 public class UpdateCustomerHandler(IUpdateCustomer updateCustomer, ILogger<UpdateCustomerHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok<HashCodeResponse>, BadRequest>> UpdateCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest, Guid id)
+    public async Task<IResult> UpdateCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest, Guid id)
     {
         var customer = mapper.Map<Customer>(customerRequest);
         customer.Id = id;
@@ -16,7 +16,7 @@ public class UpdateCustomerHandler(IUpdateCustomer updateCustomer, ILogger<Updat
         if(result == null)
         {
             logger.LogWarning("Failed to update customer with ID {CustomerId}.", id);
-            return TypedResults.BadRequest();
+            throw new NotFoundException($"Customer with ID {id} not found.");
         }
 
         logger.LogInformation("Customer with ID {CustomerId} updated successfully.", id);

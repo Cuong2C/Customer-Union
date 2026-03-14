@@ -12,3 +12,4 @@ global using Customer_Union.Application.Interfaces.ClientSources;
 global using Customer_Union.Application.Interfaces.Customers;
 global using Customer_Union.Application.Dtos;
 global using AutoMapper;
+global using Customer_Union.Configuration.Exceptions;

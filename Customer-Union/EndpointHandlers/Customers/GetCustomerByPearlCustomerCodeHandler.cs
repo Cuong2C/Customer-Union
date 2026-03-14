@@ -2,14 +2,14 @@
 
 public class GetCustomerByPearlCustomerCodeHandler(IGetCustomerByPearlCode getCustomerByPearlCode, ILogger<GetCustomerByPearlCustomerCodeHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok<CustomerResponse>, NotFound>> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode)
+    public async Task<IResult> GetCustomerByPearlCustomerCodeAsync(string pearlCustomerCode)
     {
         var customer = await getCustomerByPearlCode.GetCustomerByPearlCustomerCodeAsync(pearlCustomerCode);
 
         if (customer == null)
         {
             logger.LogWarning($"Customer with pearlCustomerCode {pearlCustomerCode} not found.");
-            return TypedResults.NotFound();
+            throw new NotFoundException($"Customer with pearlCustomerCode {pearlCustomerCode} not found.");
         }
 
         logger.LogInformation($"Retrieved customer with pearlCustomerCode {pearlCustomerCode} successfully.");

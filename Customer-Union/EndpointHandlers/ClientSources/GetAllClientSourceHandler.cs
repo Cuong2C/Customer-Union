@@ -2,7 +2,7 @@
 {
     public class GetAllClientSourceHandler(IGetAllClientSource getAllClientSource, IMapper mapper)
     {
-        public async Task<Ok<IEnumerable<ClientSourceResponse>>> GetAllClientSourcesAsync()
+        public async Task<IResult> GetAllClientSourcesAsync()
         {
             var clientSources = await getAllClientSource.GetAllClientSourcesAsync();
             var result = mapper.Map<IEnumerable<ClientSourceResponse>>(clientSources);

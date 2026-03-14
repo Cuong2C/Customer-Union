@@ -4,13 +4,13 @@ namespace Customer_Union.EndpointHandlers.Securities;
 
 public class GenerateTokenHandler(IGenerateToken genrateToken, ILogger<GenerateTokenHandler> logger)
 {
-    public async Task<Results<Ok<GenrateTokenResponse>, BadRequest>> GenerateTokenAsync(GenrateTokenRequest genrateTokenRequest)
+    public async Task<IResult> GenerateTokenAsync(GenrateTokenRequest genrateTokenRequest)
     {
         var result =  await genrateToken.GenerateTokenAsync(genrateTokenRequest.ClientCode, genrateTokenRequest.ClientSecret);
 
         if (string.IsNullOrEmpty(result))
         {
-            return TypedResults.BadRequest();
+            throw new BadRequestException("Invalid ClientCode or ClientSecret. Token generation failed.");
         }
 
         var response = new GenrateTokenResponse

@@ -2,7 +2,7 @@
 
 public class GetCustomerByPhoneHandler(IGetCustomerByPhone getCustomerByPhone, ILogger<GetCustomerByPhoneHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok<IEnumerable<CustomerResponse>>, NotFound>> GetCustomerByPhoneAsync(string phoneNumber)
+    public async Task<IResult> GetCustomerByPhoneAsync(string phoneNumber)
     {
         var customers = await getCustomerByPhone.GetCustomerByPhoneAsync(phoneNumber);
 

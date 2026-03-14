@@ -1,4 +1,5 @@
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,20 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapLongbeachApi();
+
+app.UseExceptionHandler(options =>
+{
+    options.Run(async context =>
+    {
+        var exceptionHandler = context.RequestServices.GetRequiredService<IExceptionHandler>();
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        if (exception != null)
+        {
+            await exceptionHandler.TryHandleAsync(context, exception, context.RequestAborted);
+        }
+    });
+});
 
 app.UseHealthChecks("/health",
     new HealthCheckOptions

@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
-using Customer_Union.Application.Interfaces.Customers;
 using Customer_Union.Application.Interfaces.Securities;
 using Customer_Union.Configuration;
+using Customer_Union.Configuration.Exceptions;
 using Customer_Union.EndpointHandlers.ClientSourceHandlers;
 using Customer_Union.EndpointHandlers.CustomerHandlers;
 using Customer_Union.EndpointHandlers.Securities;
@@ -110,6 +110,8 @@ public static class ApplicationServiceExtensions
             options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
 
         });
+
+        builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
         builder.Services.AddHealthChecks()
             .AddSqlServer(connectionString)

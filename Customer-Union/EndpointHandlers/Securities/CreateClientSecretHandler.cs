@@ -4,13 +4,13 @@ namespace Customer_Union.EndpointHandlers.Securities;
 
 public class CreateClientSecretHandler(ICreateClientSecret createClientSecret, ILogger<CreateClientSecretHandler> logger)
 {
-    public async Task<Results<Ok<CreateClientSecretResponse>, BadRequest>> CreateClientSecretAsync(CreateClientSecretRequest createClientSecretRequest)
+    public async Task<IResult> CreateClientSecretAsync(CreateClientSecretRequest createClientSecretRequest)
     {
         var result = await createClientSecret.CreateClientSecretAsync(createClientSecretRequest.ClientCode);
 
         if (string.IsNullOrEmpty(result))
         {
-            return TypedResults.BadRequest();
+            throw new Exception($"Failed to create client secret for client code: {createClientSecretRequest.ClientCode}");
         }
 
         var response = new CreateClientSecretResponse

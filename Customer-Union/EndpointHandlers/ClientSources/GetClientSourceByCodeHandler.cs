@@ -2,14 +2,14 @@
 
 public class GetClientSourceByCodeHandler(ILogger<GetClientSourceByCodeHandler> logger, IGetClientSourceByCode getClientSourceByCode, IMapper mapper)
 {
-    public async Task<Results<Ok<ClientSourceResponse>, NotFound>> GetClientSourceByCodeAsync(string clientSourceCode)
+    public async Task<IResult> GetClientSourceByCodeAsync(string clientSourceCode)
     {
         var clientSource = await getClientSourceByCode.GetClientSourceByCodeAsync(clientSourceCode);
         
         if (clientSource == null)
         {
             logger.LogWarning($"Client source with code {clientSourceCode} not found.");
-            return TypedResults.NotFound();
+            throw new NotFoundException($"Client source with code {clientSourceCode} not found.");
         }
 
         logger.LogInformation($"Retrieved client source with code {clientSourceCode} successfully.");

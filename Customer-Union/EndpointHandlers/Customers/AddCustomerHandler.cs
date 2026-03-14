@@ -2,14 +2,14 @@
 
 public class AddCustomerHandler(IAddCustomer addCustomer, ILogger<AddCustomerHandler> logger, IMapper mapper)
 {
-    public async Task<Results<Ok<HashCodeResponse>, BadRequest>> AddCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest)
+    public async Task<IResult> AddCustomerAsync(HttpContext httpContext, CustomerRequest customerRequest)
     {
         var customer = mapper.Map<Customer>(customerRequest);
 
         string clientSourceCode = httpContext.User.FindFirst("ClientSourceCode")!.Value;
         if (string.IsNullOrEmpty(clientSourceCode))
         {
-            return TypedResults.BadRequest();
+            throw new BadRequestException("Client source code is missing in the token.");
         }
 
         customer.SetAdditionalProperties(clientSourceCode);
@@ -18,7 +18,7 @@ public class AddCustomerHandler(IAddCustomer addCustomer, ILogger<AddCustomerHan
 
         if (result == null)
         {
-            return TypedResults.BadRequest();
+            throw new Exception("Failed to add customer.");
         }
 
         logger.LogInformation($"Customer id: {result.Id} added successfully");
